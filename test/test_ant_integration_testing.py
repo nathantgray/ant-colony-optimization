@@ -7,7 +7,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 
-import ant_colony as module
+import antcolony as module
 
 #give distance between two GPS locations
 def distance_on_earth(start, end):
@@ -116,13 +116,13 @@ class TestAntIntegrationTesting(unittest.TestCase):
 		def mock_distance_callback(start, end):
 			return (2*end - start) ** 2	
 			
-		test_object = module.ant_colony.ant(init_location=0,
-											possible_locations=[x for x in range(0, 10)],
-											pheromone_map=_init_matrix(10, 0),
-											distance_callback=mock_distance_callback,
-											alpha=1,
-											beta=1,
-											first_pass=True)
+		test_object = module.AntColony.Ant(init_location=0,
+										   possible_locations=[x for x in range(0, 10)],
+										   pheromone_map=_init_matrix(10, 0),
+										   distance_callback=mock_distance_callback,
+										   alpha=1,
+										   beta=1,
+										   first_pass=True)
 		
 		#before run() we need to override random.choice for predictable results
 		
@@ -167,13 +167,13 @@ class TestAntIntegrationTesting(unittest.TestCase):
 		def mock_distance_callback(start, end):
 			return (2*end - start) ** 2
 			
-		test_object = module.ant_colony.ant(init_location=0,
-											possible_locations=[x for x in range(0, 10)],
-											pheromone_map=_init_matrix(10, 1),
-											distance_callback=mock_distance_callback,
-											alpha=1,
-											beta=1,
-											first_pass=False)
+		test_object = module.AntColony.Ant(init_location=0,
+										   possible_locations=[x for x in range(0, 10)],
+										   pheromone_map=_init_matrix(10, 1),
+										   distance_callback=mock_distance_callback,
+										   alpha=1,
+										   beta=1,
+										   first_pass=False)
 		
 		#before run() we need to override random.random for predictable results
 		def mock_random(*args):
@@ -243,13 +243,13 @@ class TestAntIntegrationTesting(unittest.TestCase):
 				return distance
 			return self.test_distance_matrix[start][end]
 			
-		test_object = module.ant_colony.ant(init_location=0,
-											possible_locations=self.test_nodes.keys(),
-											pheromone_map=_init_matrix(10, 1),
-											distance_callback=_get_distance,
-											alpha=1,
-											beta=1,
-											first_pass=False)
+		test_object = module.AntColony.Ant(init_location=0,
+										   possible_locations=self.test_nodes.keys(),
+										   pheromone_map=_init_matrix(10, 1),
+										   distance_callback=_get_distance,
+										   alpha=1,
+										   beta=1,
+										   first_pass=False)
 		
 		#before run() we need to override random.random for predictable results
 		def mock_random(*args):

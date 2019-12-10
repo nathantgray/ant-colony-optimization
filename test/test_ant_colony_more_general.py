@@ -7,7 +7,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 
-import ant_colony as module
+import antcolony as module
 
 #	W:\Programming Workspace\ACO\ACO more general
 #	testing of a more general implementation of ACO
@@ -35,7 +35,7 @@ class TestAntColonyMoreGeneral(unittest.TestCase):
 			return 3.0
 		
 		#testing
-		test_object = module.ant_colony(testing_nodes, testing_distance_callback)
+		test_object = module.AntColony(testing_nodes, testing_distance_callback)
 		self.assertEqual([15, 'a', 'beaver', 'yes we can'], test_object.mainloop())
 		
 if __name__ == '__main__':

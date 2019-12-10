@@ -7,14 +7,14 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 
-import ant_colony as module
+import antcolony as module
 
 class TestAntUpdateDistanceTraveled(unittest.TestCase):
 	def test_correct(self):
 		#Note: can't do this in setup because of python2's wonky OOP, doing it in the test instead
 		
 		#inherit from ant so we can call _update_distance_traveled correctly
-		class test_empty_object(module.ant_colony.ant):
+		class test_empty_object(module.AntColony.Ant):
 			#override each method EXCEPT _update_distance_traveled, to get a clean testing environment
 			def __init__(self): pass
 			def run(self): pass
