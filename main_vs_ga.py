@@ -2,7 +2,7 @@ from antcolony import AntColony
 import matplotlib.pyplot as plt
 import numpy as np
 
-gen_index = 2
+gen_index = 3
 
 i = gen_index - 1
 
@@ -13,22 +13,22 @@ p_n = p_g + np.array([0, 1, 2, 3, 3])  # $/MW each hour
 
 ramp_rate = np.array([120, 60, 60])  # MW/h each unit
 quick_start = np.array([0, 20, 20])  # MW each unit
-minOn = np.array([2, 2, 1])  # Minimum on time in hours
-minOff = np.array([2, 1, 1])  # Minimum off time in hours
+minOn = np.array([0, 0, 0])  # Minimum on time in hours
+minOff = np.array([0, 0, 0])  # Minimum off time in hours
 initialState = np.array([1, 0, 0])  # (1 means it starts on)
 initialHour = np.array([4, 2, 1])  # hours it has been in the initial state
 state = np.array([])
 Pg_min = np.array([50, 20, 20])  # MW each unit
 Pg_max = np.array([200, 100, 100])  # MW each unit
 p_fuel = np.array([2, 2, 2.5])  # $/MBtu each unit
-startup = p_fuel*np.array([200, 25, 25])  # $ to start the unit
+startup = p_fuel*np.array([0, 0, 0])  # $ to start the unit
 shutdown = np.array([0, 0, 0])  # $ to shutdown unit
 a = p_fuel*np.array([400, 25, 25])  # each unit
 b = p_fuel*np.array([8, 10, 10])  # each unit
 c = p_fuel*np.array([0.01, 0.025, 0.02])  # each unit
 P0 = np.array([
     [0, 0, 0, 0, 0],
-    [0, 30, 30, 30, 30],
+    [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0]])  # MW each hour
 k = 1  # markup percent for bilateral contract
 # Contract price for gen2
@@ -98,14 +98,14 @@ for t in range(1, n_hours + 1):
     cost_on[t] = L[t]
 
     # Unit Off
-    Noffmin = 0
+    Noffmin = quick_start[i]
     Noffmax = quick_start[i]
     n_off[t] = (p_n[t] - lr - b[i]) / (2 * c[i])
-    if n_off[t] > Noffmax:
+    if n_off[t] >= Noffmax:
         n_off[t] = Noffmax
 
     if n_off[t] < Noffmin:
-        n_off[t] = Noffmin
+        n_off[t] = 0
 
     if n_off[t] == 0:
         B = P0[i, t]
