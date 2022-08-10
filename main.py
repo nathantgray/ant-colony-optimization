@@ -158,7 +158,6 @@ def cost_callback(from_node, to_node):
     else:
         return np.inf
 
-
 class AntColonyPBUC(AntColony):
     class Ant(AntColony.Ant):
         def _update_route(self, new):
@@ -293,7 +292,7 @@ class AntColonyPBUC(AntColony):
                 cumulative += weight
 
 
-colony = AntColonyPBUC(nodes, cost_callback, ant_count=10, alpha=0.5, beta=1.2, iterations=100)  # alpha=0.5, beta=1.2
+colony = AntColonyPBUC(nodes, cost_callback, ant_count=10, alpha=0.5, beta=1.2, iterations=10)  # alpha=0.5, beta=1.2
 route = colony.mainloop()
 print(route)
 print(colony.shortest_distance/scale + bias * n_hours)
@@ -301,8 +300,15 @@ print(colony.shortest_distance)
 
 t = [nodes[key][0] for key in route]
 state = [nodes[key][1] for key in route]
+print('P: ', p*state)
+print('R: ', r*state)
+print('N: ', n*state)
+print('N: ', n_off*(1-np.array(state)))
 plt.figure(1)
 plt.plot(t, state, marker='o')
 plt.figure(2)
 plt.plot(colony.it_best)
+plt.title('Best Cost Each Iteration for Generator {}'.format(gen_index))
+plt.ylabel('Best Tour Cost (scaled)')
+plt.xlabel('Iteration')
 plt.show()

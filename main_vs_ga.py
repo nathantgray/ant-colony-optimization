@@ -12,7 +12,7 @@ p_r = p_g + np.array([0, 2, 3, 4, 2])  # $/MW each hour
 p_n = p_g + np.array([0, 1, 2, 3, 3])  # $/MW each hour
 
 ramp_rate = np.array([120, 60, 60])  # MW/h each unit
-quick_start = np.array([0, 20, 20])  # MW each unit
+quick_start = np.array([0, 20, 0])  # MW each unit
 minOn = np.array([0, 0, 0])  # Minimum on time in hours
 minOff = np.array([0, 0, 0])  # Minimum off time in hours
 initialState = np.array([1, 0, 0])  # (1 means it starts on)
@@ -98,14 +98,14 @@ for t in range(1, n_hours + 1):
     cost_on[t] = L[t]
 
     # Unit Off
-    Noffmin = quick_start[i]
+    Noffmin = 0
     Noffmax = quick_start[i]
     n_off[t] = (p_n[t] - lr - b[i]) / (2 * c[i])
     if n_off[t] >= Noffmax:
         n_off[t] = Noffmax
 
     if n_off[t] < Noffmin:
-        n_off[t] = 0
+        n_off[t] = Noffmin
 
     if n_off[t] == 0:
         B = P0[i, t]
@@ -116,9 +116,9 @@ for t in range(1, n_hours + 1):
         cost_off[t] = - p_n[t] * n_off[t] + ln * n_off[t] - f_bl[i, t] + Cost
 
 print('L: ', L)
-print('r: ', r)
-print('n: ', n)
-print('p: ', p)
+print('P: ', p)
+print('R: ', r)
+print('N: ', n)
 print('n_off: ', n_off)
 print('startup: ', startup[i])
 print('cost_on: ', cost_on)
@@ -157,7 +157,6 @@ def cost_callback(from_node, to_node):
         return (_cost - bias)*scale  # make sure costs are all greater than 0
     else:
         return np.inf
-
 
 class AntColonyPBUC(AntColony):
     class Ant(AntColony.Ant):
@@ -301,8 +300,16 @@ print(colony.shortest_distance)
 
 t = [nodes[key][0] for key in route]
 state = [nodes[key][1] for key in route]
+print('P: ', p*state)
+print('R: ', r*state)
+print('N: ', n*state)
+print('N: ', n_off*(1-np.array(state)))
 plt.figure(1)
 plt.plot(t, state, marker='o')
+plt.show()
 plt.figure(2)
 plt.plot(colony.it_best)
+plt.title('Best Cost Each Iteration for Generator {}'.format(gen_index))
+plt.ylabel('Best Tour Cost (scaled)')
+plt.xlabel('Iteration')
 plt.show()
